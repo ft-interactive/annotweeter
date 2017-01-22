@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "ElasticSearch-based infrastructure to monitor and annotate tweets",
   "scripts": {
-    "postinstall": "npm run build",
     "start": "node start.js",
     "build": "rm -rf dist; webpack --config webpack.prod.config.js -p"
   },
