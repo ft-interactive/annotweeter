@@ -1,2 +1,2 @@
 web: npm start
-logstash: logstash -f logstash.conf
+logstash: bin/logstash -f logstash.conf
