@@ -1,22 +1,14 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import {SearchPage} from "./SearchPage";
-import {App} from "./AppPage";
-import { Router, Link, Route, browserHistory, IndexRoute } from 'react-router'
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
-const Home = () => {
-  return (
-    <div>
-      <Link to="search">Go to Search</Link>
-    </div>
-  )
-}
+import SearchPage from './SearchPage';
 
 ReactDOM.render((
-<Router history={browserHistory}>
-  <Route path="/" component={App}>
-    <IndexRoute component={Home}/>
-    <Route path="search" component={SearchPage}/>
-  </Route>
-</Router>
+  <Router history={browserHistory}>
+    <Route path="/" component={SearchPage}>
+      <IndexRoute component={SearchPage} />
+      <Route path="search" component={SearchPage} />
+    </Route>
+  </Router>
 ), document.getElementById('root'));

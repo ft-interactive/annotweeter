@@ -18,15 +18,20 @@ module.exports = {
     const app = express();
 
     const searchkitRouter = SearchkitExpress.createRouter({
-      host: process.env.BONSAI_URL || 'http://localhost:9200',
+      host: process.env.BONSAI_URL || 'http://192.168.99.100:9200',
       index: 'tweets',
       queryProcessor(query, req, res) {
-        console.log(query);
+        console.dir(query);
         return query;
       },
     });
 
-    app.use('/api', authS3ONoRedirect, searchkitRouter);
+    if (env.production) {
+      app.use('/api', authS3ONoRedirect, searchkitRouter);
+    } else {
+      app.use('/api', searchkitRouter);
+    }
+
     app.use(compression());
     app.set('view engine', 'ejs');
     app.set('views', `${__dirname}/views`);
@@ -70,7 +75,7 @@ module.exports = {
     }
 
     app.listen(port, () => {
-      console.log(`Server listening on port ${port}, go refresh and see magic`);
+      console.log(`Server listening on port ${port}`);
     });
   },
 };

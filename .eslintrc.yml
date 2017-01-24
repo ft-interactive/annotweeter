@@ -3,5 +3,7 @@
 
 extends: airbnb
 root: true
+env:
+  browser: true
 rules:
   no-underscore-dangle: 0
