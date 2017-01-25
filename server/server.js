@@ -20,17 +20,11 @@ module.exports = {
     const searchkitRouter = SearchkitExpress.createRouter({
       host: process.env.BONSAI_URL || 'http://192.168.99.100:9200',
       index: 'tweets',
-      queryProcessor(query, req, res) {
+      queryProcessor(query) {
         console.dir(query);
         return query;
       },
     });
-
-    if (env.production) {
-      app.use('/api', authS3ONoRedirect, searchkitRouter);
-    } else {
-      app.use('/api', searchkitRouter);
-    }
 
     app.use(compression());
     app.set('view engine', 'ejs');
@@ -38,6 +32,12 @@ module.exports = {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(methodOverride());
+
+    if (env.production) {
+      app.use('/api', authS3ONoRedirect, searchkitRouter);
+    } else {
+      app.use('/api', searchkitRouter);
+    }
 
     const port = Number(process.env.PORT || 3000);
 

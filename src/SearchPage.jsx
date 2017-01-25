@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
+import { Tweet } from 'react-twitter-widgets';
 
 import {
   SearchkitManager, SearchkitProvider,
@@ -15,56 +16,19 @@ require('./index.scss');
 const host = '/api/';
 const searchkit = new SearchkitManager(host);
 
-class TweetHitsGridItem extends React.Component {
-  constructor(props) {
-    super();
-    if (props.result) {
-      this.result = props.result;
-      if (this.result._source.entities) {
-        this.url = this.result._source.entities[0].url;
-      }
-    }
-  }
+const TweetHitsGridItem = props => (
+  // <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))} data-qa="hit">
+  <div className="hit-item">
+    <Tweet data-qa="hit" tweetId={props.result._source.id_str} options={{ width: 'auto'}} />
+    {/* <Annotations tweetId={props.result._source.id_str} /> */}
+  </div>
+);
 
-  componentWillMount() {
-    if (this.url) {
-      fetch(`https://publish.twitter.com/oembed?url=${this.url}`)
-        .then(res => res.text())
-        .then(txt => this.setState(txt));
-    }
-  }
+// console.dir(Hits.propTypes);
 
-  render() {
-    const tweetMarkup = this.state;
-    console.dir(this.result);
-    const result = this.result;
-    if (tweetMarkup) {
-      console.dir(tweetMarkup);
-      return (
-        <div data-qa="hit">
-          <div dangerouslySetInnerHTML={{ __html: tweetMarkup }} />
-        </div>
-      );
-    } else {
-      return (
-        <div data-qa="hit">
-          {result._source.text}
-        </div>
-      );
-    }
-  }
-}
-
-/* <div className={bemBlocks.item().mix(bemBlocks.container('item'))} data-qa="hit">
-  <a href={url} target="_blank" rel="noopener noreferrer">
-    <img data-qa="poster" alt="" className={bemBlocks.item('poster')} src={result._source.poster} width="170" height="240" />
-    <div data-qa="title" alt="" className={bemBlocks.item('title')} dangerouslySetInnerHTML={{ __html: source.title }} />
-  </a>
-</div> */
-
-// TweetHitsGridItem.propTypes = {
-//   result: HitItemProps.isRequired,
-// };
+TweetHitsGridItem.propTypes = {
+  result: React.PropTypes.object.isRequired,
+};
 
 export default function () {
   return (
@@ -75,7 +39,7 @@ export default function () {
             autofocus
             searchOnChange
             placeholder="Search tweets..."
-            prefixQueryFields={['user.screen_name^1', 'text^2']}
+            prefixQueryFields={['text^1', 'user.screen_name']}
           />
         </TopBar>
         <LayoutBody>
@@ -83,7 +47,7 @@ export default function () {
             <RefinementListFilter
               id="tweeted-by"
               title="Tweeted by..."
-              field="username.raw"
+              field="user.screen_name.raw"
               operator="AND"
               size={10}
             />
@@ -95,8 +59,8 @@ export default function () {
                 <SortingSelector
                   options={[
                       { label: 'Relevance', field: '_score', order: 'desc', defaultOption: true },
-                      { label: 'Latest tweets', field: 'id_str', order: 'desc' },
-                      { label: 'Earliest tweets', field: 'id_str', order: 'asc' },
+                      { label: 'Latest tweets', field: '@timestamp', order: 'desc' },
+                      { label: 'Earliest tweets', field: '@timestamp', order: 'asc' },
                   ]}
                 />
               </ActionBarRow>
@@ -107,7 +71,6 @@ export default function () {
             </ActionBar>
             <Hits
               mod="sk-hits-grid" hitsPerPage={10} itemComponent={TweetHitsGridItem}
-              sourceFilter={['username']}
             />
             <NoHits />
             <Pagination showNumbers />
