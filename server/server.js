@@ -33,12 +33,6 @@ module.exports = {
     app.use(bodyParser.json());
     app.use(methodOverride());
 
-    if (env.production) {
-      app.use('/api', authS3ONoRedirect, searchkitRouter);
-    } else {
-      app.use('/api', searchkitRouter);
-    }
-
     const port = Number(process.env.PORT || 3000);
 
     if (!env.production) {
@@ -62,23 +56,23 @@ module.exports = {
       }));
 
       app.use(webpackHotMiddleware(compiler));
-
-
+      app.use('/api', searchkitRouter);
       app.get('*', (req, res) => {
         res.render('index');
       });
     } else {
-      app.use('/static', express.static(`${__dirname}/dist`));
+      app.use('/static', express.static(path.resolve(__dirname, '..', 'dist')));
 
-      // Authenticated routes
+      // Authenticated paths
       app.use(authS3O);
+      app.use('/api', authS3ONoRedirect, searchkitRouter);
       app.get('*', authS3O, (req, res) => {
         res.render('index');
       });
     }
 
     app.listen(port, () => {
-      console.log(`Server listening on port ${port}`);
+      console.log(`Server (${env.production ? 'production' : 'development'}) listening on port ${port}`);
     });
   },
 };
