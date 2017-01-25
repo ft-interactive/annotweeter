@@ -68,6 +68,7 @@ module.exports = {
         res.render('index');
       });
     } else {
+      app.use(authS3O);
       app.get('*', authS3O, (req, res) => {
         res.render('index');
       });
