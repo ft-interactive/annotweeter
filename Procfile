@@ -1,2 +1,2 @@
 web: npm start
-logstash: start-logstash.sh
+logstash: ./start-logstash.sh
