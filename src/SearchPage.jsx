@@ -15,10 +15,10 @@ require('./index.scss');
 
 const host = '/api/';
 const searchkit = new SearchkitManager(host);
-const formatDate = ts => {
+const formatDate = (ts) => {
   const date = new Date(ts);
-  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
-}
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+};
 
 
 const TweetHitsGridItem = props => (
@@ -75,9 +75,9 @@ export default function () {
                 <HitsStats />
                 <SortingSelector
                   options={[
-                      { label: 'Relevance', field: '_score', order: 'desc', defaultOption: true },
-                      { label: 'Latest tweets', field: '@timestamp', order: 'desc' },
+                      { label: 'Latest tweets', field: '@timestamp', order: 'desc', defaultOption: true },
                       { label: 'Earliest tweets', field: '@timestamp', order: 'asc' },
+                      { label: 'Relevance', field: '_score', order: 'desc' },
                   ]}
                 />
               </ActionBarRow>
