@@ -1,46 +1,46 @@
-var path = require('path');
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  context:path.join(__dirname),
+  context: path.join(__dirname),
   entry: [
-    './src/index.jsx'
+    './src/index.jsx',
   ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/static'
+    publicPath: '/static',
   },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(true),
-    new ExtractTextPlugin("styles.css"),
+    new ExtractTextPlugin('styles.css'),
     new webpack.optimize.UglifyJsPlugin({
       mangle: true,
       warnings: false,
       output: {
-        comments: false
+        comments: false,
       },
       compress: {
-        warnings: false
-      }
+        warnings: false,
+      },
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    })
+        NODE_ENV: JSON.stringify('production'),
+      },
+    }),
   ],
   resolve: {
     alias: {
-      react: path.resolve('./node_modules/react')
+      react: path.resolve('./node_modules/react'),
     },
-    extensions:[".js", ".jsx", ".webpack.js", ".web.js",""]
+    extensions: ['.js', '.jsx', '.webpack.js', '.web.js', ''],
   },
   resolveLoader: {
-    root: path.join(__dirname, "node_modules")
+    root: path.join(__dirname, 'node_modules'),
   },
   module: {
     loaders: [
@@ -51,20 +51,21 @@ module.exports = {
         query: {
           presets: [
             require.resolve('babel-preset-es2015'),
-            require.resolve('babel-preset-react')
-          ]
-        }
+            require.resolve('babel-preset-react'),
+          ],
+          plugins: ['transform-class-properties']
+        },
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('css!sass')
+        loader: ExtractTextPlugin.extract('css!sass'),
       },
       {
         test: /\.(jpg|png|svg)$/,
         loaders: [
-            'file-loader?name=[path][name].[ext]'
-        ]
-      }
-    ]
-  }
+          'file-loader?name=[path][name].[ext]',
+        ],
+      },
+    ],
+  },
 };

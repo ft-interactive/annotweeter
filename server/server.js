@@ -62,6 +62,15 @@ module.exports = {
     }
 
     app.use('/api', searchkitRouter);
+    app.get('/api/annotations/:id', (req, res, next) => {
+      return res.json([]);
+    });
+    app.post('/api/annotations', (req, res, next) => {
+      return res.json([]);
+    });
+    app.put('/api/annotations/:id', (req, res, next) => {
+      return res.json([]);
+    });
     app.get('*', (req, res) => {
       res.render('index');
     });

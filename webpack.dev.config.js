@@ -1,31 +1,32 @@
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  devtool:"eval",
-  context:path.join(__dirname),
+  devtool: 'eval',
+  context: path.join(__dirname),
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    './src/index.jsx'
+    './src/index.jsx',
   ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/static'
+    publicPath: '/static',
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
   ],
   resolve: {
     alias: {
-      react: path.resolve('./node_modules/react')
+      react: path.resolve('./node_modules/react'),
+      'react-twitter-widgets': path.resolve('/Users/andrew.rininsland/Projects/FORKS/react-twitter-widgets'),
     },
-    extensions:[".js", ".jsx", ".webpack.js", ".web.js",""]
+    extensions: ['.js', '.jsx', '.webpack.js', '.web.js', ''],
   },
   resolveLoader: {
-    root: path.join(__dirname, "node_modules")
+    root: path.join(__dirname, 'node_modules'),
   },
   module: {
     loaders: [
@@ -36,20 +37,21 @@ module.exports = {
         query: {
           presets: [
             require.resolve('babel-preset-es2015'),
-            require.resolve('babel-preset-react')
-          ]
-        }
+            require.resolve('babel-preset-react'),
+          ],
+          plugins: ['transform-class-properties'],
+        },
       },
       {
         test: /\.scss$/,
-        loaders: ["style", "css", "sass"]
+        loaders: ['style', 'css', 'sass'],
       },
       {
         test: /\.(jpg|png|svg)$/,
         loaders: [
-            'file-loader?name=[path][name].[ext]'
-        ]
-      }
-    ]
-  }
+          'file-loader?name=[path][name].[ext]',
+        ],
+      },
+    ],
+  },
 };

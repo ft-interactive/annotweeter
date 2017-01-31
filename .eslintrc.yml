@@ -2,9 +2,12 @@
 # This ruleset is not used in CI as it would be too strict.
 
 extends: airbnb
+parser: babel-eslint
 root: true
 env:
   browser: true
 rules:
   no-underscore-dangle: 0
   react/forbid-prop-types: 0
+plugins:
+  - "class-property"
