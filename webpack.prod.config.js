@@ -1,3 +1,7 @@
+/**
+ * Webpack config via SearchKit boilerplate
+ * (JSON loading added for Markdown support)
+ */
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -53,7 +57,7 @@ module.exports = {
             require.resolve('babel-preset-es2015'),
             require.resolve('babel-preset-react'),
           ],
-          plugins: ['transform-class-properties']
+          plugins: ['transform-class-properties'],
         },
       },
       {
@@ -61,7 +65,7 @@ module.exports = {
         loader: ExtractTextPlugin.extract('css!sass'),
       },
       {
-        test: /\.(jpg|png|svg)$/,
+        test: /\.(jpg|png|svg|json)$/,
         loaders: [
           'file-loader?name=[path][name].[ext]',
         ],

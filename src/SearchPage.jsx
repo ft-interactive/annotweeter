@@ -1,3 +1,8 @@
+/**
+ * This is the main layout page, wherein the search config
+ * is ultimately specified. The SearchKit "Hits" component
+ * surfaces the annotation interface via ElasticSearch query
+ */
 import * as React from 'react';
 import { Tweet } from 'react-twitter-widgets';
 import {
@@ -11,20 +16,18 @@ import {
 
 import Annotations from './AnnotationList';
 
+// Compiled via Webpack and node-sass
 require('./index.scss');
 
 const host = '/api/';
 const searchkit = new SearchkitManager(host);
 
 const TweetHitsGridItem = props => (
-  // <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))} data-qa="hit">
   <div className="hit-item">
     <Tweet data-qa="hit" tweetId={props.result._source.id_str} options={{ width: 'auto' }} />
     <Annotations tweetId={props.result._source.id_str} />
   </div>
 );
-
-// console.dir(Hits.propTypes);
 
 TweetHitsGridItem.propTypes = {
   result: React.PropTypes.object.isRequired,
@@ -70,9 +73,9 @@ export default function () {
                 <HitsStats />
                 <SortingSelector
                   options={[
-                      { label: 'Latest tweets', field: '@timestamp', order: 'desc', defaultOption: true },
-                      { label: 'Earliest tweets', field: '@timestamp', order: 'asc' },
-                      { label: 'Relevance', field: '_score', order: 'desc' },
+                    { label: 'Latest tweets', field: '@timestamp', order: 'desc', defaultOption: true },
+                    { label: 'Earliest tweets', field: '@timestamp', order: 'asc' },
+                    { label: 'Relevance', field: '_score', order: 'desc' },
                   ]}
                 />
               </ActionBarRow>
@@ -82,7 +85,7 @@ export default function () {
               </ActionBarRow>
             </ActionBar>
             <Hits
-              mod="sk-hits-grid" hitsPerPage={10} itemComponent={TweetHitsGridItem}
+              mod="sk-hits-grid" hitsPerPage={6} itemComponent={TweetHitsGridItem}
             />
             <NoHits />
             <Pagination showNumbers />

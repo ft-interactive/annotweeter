@@ -5,13 +5,16 @@ import React, {
 
 const propTypes = {
   annotation: PropTypes.object,
-  toggle: PropTypes.function,
+  annotationId: PropTypes.string,
+  toggle: PropTypes.func,
+  tweetId: PropTypes.string.isRequired,
 };
 
 const defaultProps = {
   annotation: {
     text: '',
   },
+  annotationId: false,
   toggle: Function,
 };
 
@@ -19,8 +22,10 @@ export default class AnnotationEditor extends Component {
   constructor(props) {
     super(props);
     this.annotation = props.annotation;
-    this.isNew = !this.annotation.id;
+    this.annotationId = props.annotationId;
+    this.isNew = !this.annotationId;
     this.toggle = props.toggle;
+    this.tweetId = props.tweetId;
   }
 
   submitAnnotation = (e) => {
@@ -28,22 +33,33 @@ export default class AnnotationEditor extends Component {
 
     const annotation = {
       text: this.state.annotationText,
+      parentId: this.tweetId,
     };
 
     if (this.isNew) {
       fetch('/api/annotations', {
         method: 'POST',
-        body: annotation,
-      });
+        body: JSON.stringify(annotation),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(this.toggle);
     } else {
-      const annotationId = this.annotation.id;
+      const annotationId = this.annotationId;
       fetch(`/api/annotations/${annotationId}`, {
         method: 'PUT',
-        body: annotation,
-      });
+        body: JSON.stringify(annotation),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(this.toggle);
     }
-
-    this.toggle();
   }
 
   handleChange = (e) => {

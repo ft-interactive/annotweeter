@@ -1,3 +1,8 @@
+/**
+ * Webpack config via SearchKit boilerplate
+ * (JSON loading added for Markdown support)
+ */
+
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -47,7 +52,7 @@ module.exports = {
         loaders: ['style', 'css', 'sass'],
       },
       {
-        test: /\.(jpg|png|svg)$/,
+        test: /\.(jpg|png|svg|json)$/,
         loaders: [
           'file-loader?name=[path][name].[ext]',
         ],
